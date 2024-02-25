@@ -16,13 +16,12 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> getGroups() {
-        List<User>users1 = users;
-        return users1;
+        return users;
     }
 
     @PostMapping(value = "/users")
     public User createUser(@Valid @RequestBody User user) {
-        if(user.getName() == null){
+        if(user.getName() == null) {
             user.setName(user.getLogin());
         }
         users.add(user);
@@ -31,7 +30,7 @@ public class UserController {
 
     @PutMapping(value = "/users")
     public User updateUser(@RequestBody User user) {
-        if(user.getName() == null){
+        if(user.getName() == null) {
             user.setName(user.getLogin());
         }
         for (int i = 0; i < users.size(); i++) {
