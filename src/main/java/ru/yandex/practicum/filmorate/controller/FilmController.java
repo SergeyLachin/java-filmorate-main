@@ -19,8 +19,7 @@ public class FilmController {
 
     @GetMapping("/films")
     public List<Film> getFilms() {
-        List<Film>films1 = films;
-        return films1;
+        return films;
     }
 
     @PostMapping(value = "/films")
