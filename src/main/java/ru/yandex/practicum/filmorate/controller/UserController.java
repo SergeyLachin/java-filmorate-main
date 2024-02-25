@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping(value = "/users")
     public User createUser(@Valid @RequestBody User user) {
-        if(user.getName() == null) {
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         users.add(user);
@@ -30,11 +30,11 @@ public class UserController {
 
     @PutMapping(value = "/users")
     public User updateUser(@RequestBody User user) {
-        if(user.getName() == null) {
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         for (int i = 0; i < users.size(); i++) {
-            if (user.getId() == i){
+            if (user.getId() == i) {
                 users.add(i,user);
             }
         }
