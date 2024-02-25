@@ -27,7 +27,7 @@ public class FilmController {
         if (film.getReleaseDate().isAfter(a)) {
             films.add(film);
             log("Добавили новый фильм.");
-        }else {
+        } else {
             throw new ValidationException("Неверная дата релиза");
         }
         return film;
@@ -42,7 +42,7 @@ public class FilmController {
                     log("Фильм изменен.");
                 }
             }
-        }else {
+        } else {
             throw new ValidationException("Неверная дата релиза");
         }
         return film;
