@@ -24,7 +24,7 @@ public class FilmController {
 
     @PostMapping(value = "/films")
     public Film create(@RequestBody Film film) throws ValidationException {
-        if (film.getReleaseDate().isAfter(a)){
+        if (film.getReleaseDate().isAfter(a)) {
             films.add(film);
             log("Добавили новый фильм.");
         }else {
