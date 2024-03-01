@@ -47,7 +47,7 @@ public class UserController {
             users.put(user.getId(), user);
             log.info("Информация о пльзователе " + user.getId() + " обновлена.");
         } else {
-            throw new ValidationException("Пользователя с id: "+ user.getId() + " нет.");
+            throw new ValidationException("Пользователя с id: " + user.getId() + " нет.");
         }
         return user;
     }
