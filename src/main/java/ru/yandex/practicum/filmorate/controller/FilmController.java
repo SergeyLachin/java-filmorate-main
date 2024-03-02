@@ -18,41 +18,35 @@ public class FilmController {
     private final HashMap<Integer, Film> films = new HashMap<>();
     private int id = 0;
 
-    @ResponseBody
     @PostMapping(value = "/films")
-    public Film create(@Valid @RequestBody Film film) throws ValidationException {
+    public Film create(@Valid @RequestBody Film film) {
         filmValidation(film);
-        if (film.getId() <= 0) {
-            film.setId(++id);
-            log.info("Пустой идентификатор фильма.");
-        }
-
+        film.setId(++id);
         films.put(film.getId(), film);
-        log.info("Фильм" + film.getName() + "добавлен в коллекцию.");
+        log.info("Фильм {} добавлен в коллекцию.",film.getName());
+        id = film.getId();
         return film;
     }
 
-    @ResponseBody
     @GetMapping("/films")
     public List<Film> getFilms() {
         log.info("Список фильмов получен");
         return new ArrayList<>(films.values());
     }
 
-    @ResponseBody
     @PutMapping("/films")
-    public Film update(@Valid @RequestBody Film film) throws ValidationException {
+    public Film update(@Valid @RequestBody Film film) {
         filmValidation(film);
         if (films.containsKey(film.getId())) {
             films.put(film.getId(), film);
-            log.info("Информация о фильме " + film.getName() + " обновлена.");
+            log.info("Информация о фильме {} обновлена.", film.getName());
         } else {
             throw new ValidationException("Такого фильма в коллекции не существует.");
         }
         return film;
     }
 
-    private void filmValidation(Film film) throws ValidationException {
+    private void filmValidation(Film film) {
         if (film.getReleaseDate() == null ||
                 film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года.");

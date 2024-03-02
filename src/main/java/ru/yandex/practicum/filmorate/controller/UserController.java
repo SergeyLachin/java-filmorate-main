@@ -19,40 +19,33 @@ public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();
     private int id = 0;
 
-    @ResponseBody
     @PostMapping
-    public User create(@Valid @RequestBody User user) throws ValidationException {
+    public User create(@Valid @RequestBody User user) {
         userValidation(user);
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-            log.info("Имя для отображения может быть пустым — в таком случае будет использован логин.");
-        }
         users.put(user.getId(), user);
-        log.info("Создан ползователь с id: " +  user.getId());
+        log.info("Создан ползователь с id: {}.",  user.getId());
         return user;
     }
 
-    @ResponseBody
     @GetMapping
     public List<User> getUsers() {
         log.info("Список пользователей получен");
         return new ArrayList<>(users.values());
     }
 
-    @ResponseBody
     @PutMapping
-    public User update(@Valid @RequestBody User user) throws ValidationException {
+    public User update(@Valid @RequestBody User user) {
         userValidation(user);
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
-            log.info("Информация о пльзователе " + user.getId() + " обновлена.");
+            log.info("Информация о пльзователе {} обновлена.", user.getId());
         } else {
             throw new ValidationException("Пользователя с id: " + user.getId() + " нет.");
         }
         return user;
     }
 
-    private void userValidation(User user) throws ValidationException {
+    private void userValidation(User user) {
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем.");
         }
@@ -65,6 +58,10 @@ public class UserController {
         }
         if (user.getLogin().isBlank() || user.getLogin().isEmpty()) {
             throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
+        }
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+            log.info("Имя для отображения может быть пустым — в таком случае будет использован логин.");
         }
     }
 }

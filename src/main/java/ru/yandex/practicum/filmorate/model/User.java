@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
@@ -17,10 +14,14 @@ public class User {
     @PositiveOrZero
     private int id;
     @Email
+    @NotEmpty
     private String email;
     @NotNull
+    @NotBlank
+    @Pattern(regexp = ".*\\s.*")
     private String login;
     private String name;
     @PastOrPresent
+    @NotNull
     private LocalDate birthday;
 }
