@@ -11,12 +11,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/users")
 @RestController
 public class UserController {
-    private final HashMap<Integer, User> users = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
     private int id = 0;
 
     @PostMapping
@@ -46,18 +47,9 @@ public class UserController {
     }
 
     private void userValidation(User user) {
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем.");
-        }
-        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @.");
-        }
         if (user.getId() == 0 || user.getId() < 0) {
             user.setId(++id);
-            log.info("Некорректно указа id.");
-        }
-        if (user.getLogin().isBlank() || user.getLogin().isEmpty()) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы.");
+            log.info("Некорректно указан id.");
         }
         if (user.getName() == null) {
             user.setName(user.getLogin());

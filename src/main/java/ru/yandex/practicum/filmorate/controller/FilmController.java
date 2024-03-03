@@ -11,12 +11,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
 public class FilmController {
-    private final HashMap<Integer, Film> films = new HashMap<>();
+    private final Map<Integer, Film> films = new HashMap<>();
     private int id = 0;
+    private final LocalDate birthdayFilm = LocalDate.of(1895, 12, 28);
 
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
@@ -48,20 +50,8 @@ public class FilmController {
 
     private void filmValidation(Film film) {
         if (film.getReleaseDate() == null ||
-                film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+                film.getReleaseDate().isBefore(birthdayFilm)) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года.");
-        }
-        if (film.getName().isEmpty() || film.getName().isBlank()) {
-            throw new ValidationException("Название не может быть пустым");
-        }
-        if (film.getDuration() <= 0) {
-            throw new ValidationException("Продолжительность фильма должна быть положительной.");
-        }
-        if (film.getDescription().length() > 200) {
-            throw new ValidationException("Максимальная длина описания — 200 символов");
-        }
-        if (film.getDescription().isEmpty()) {
-            throw new ValidationException("Описание фильма не заполнено");
         }
     }
 }
