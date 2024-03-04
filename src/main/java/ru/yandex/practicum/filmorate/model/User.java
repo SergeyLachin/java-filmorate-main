@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,15 +10,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @Builder
-public class Film {
+public class User {
     @PositiveOrZero
     private int id;
-    @NotBlank
-    private String name;
+    @Email
+    @NotEmpty
+    private String email;
     @NotNull
-    @Size(min = 1, max = 200)
-    private String description;
-    private LocalDate releaseDate;
-    @Positive
-    private long duration;
+    @NotBlank
+    @Pattern(regexp = "\\S+")
+    private String login;
+    private String name;
+    @PastOrPresent
+    @NotNull
+    private LocalDate birthday;
 }
