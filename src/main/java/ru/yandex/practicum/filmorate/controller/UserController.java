@@ -2,9 +2,12 @@ package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -16,33 +19,35 @@ import java.util.Map;
 @RequestMapping("/users")
 @RestController
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
+
     private int id = 0;
+    private final UserStorage userStorage;
+    private final UserService userService;
+
+    @Autowired
+    UserController(UserStorage userStorage, UserService userService) {
+        this.userStorage = userStorage;
+        this.userService = userService;
+    }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         userValidation(user);
-        users.put(user.getId(), user);
-        log.info("Создан ползователь с id: {}.",  user.getId());
-        return user;
+        return userStorage.createUser(user);
+
     }
 
     @GetMapping
     public List<User> getUsers() {
-        log.info("Список пользователей получен");
-        return new ArrayList<>(users.values());
+        return userStorage.getUsers();
+
     }
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
         userValidation(user);
-        if (users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
-            log.info("Информация о пльзователе {} обновлена.", user.getId());
-        } else {
-            throw new ValidationException("Пользователя с id: " + user.getId() + " нет.");
-        }
-        return user;
+        return userStorage.updateUser(user);
+
     }
 
     private void userValidation(User user) {
