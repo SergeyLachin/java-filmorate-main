@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,9 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
-@Slf4j
 @RestController
-@Component
+@RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
 
     FilmStorage filmStorage;
@@ -28,11 +29,8 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    private final LocalDate birthdayFilm = LocalDate.of(1895, 12, 28);
-
     @PostMapping(value = "/films")
     public Film create(@Valid @RequestBody Film film) {
-        filmValidation(film);
         return filmStorage.createFilm(film);
     }
 
@@ -43,14 +41,21 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film update(@Valid @RequestBody Film film) {
-        filmValidation(film);
         return filmStorage.updateFilm(film);
     }
 
-    private void filmValidation(Film film) {
-        if (film.getReleaseDate() == null ||
-                film.getReleaseDate().isBefore(birthdayFilm)) {
-            throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года.");
-        }
+    @GetMapping("/popular")
+    public List<Film> getPopularMovies(@RequestParam(defaultValue = "10") Integer count) {
+        return filmService.getPopularMovies(count);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public void likeAMovie(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.like(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void removeLike(@PathVariable Long id, @PathVariable Long userId) {
+        filmService.dislike(id, userId);
     }
 }

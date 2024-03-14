@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class User {
-    private Set<Long> friends = new HashSet<>();
+
     @PositiveOrZero
     private int id;
     @Email
@@ -27,4 +27,17 @@ public class User {
     @PastOrPresent
     @NotNull
     private LocalDate birthday;
+    private Set<Long> friends;
+
+    public void addFriend(Long id) {
+        friends.add(id);
+    }
+
+    public void removeFriend(Long id) {
+        friends.remove(id);
+    }
+
+    public int getFriendsQuantity() {
+        return friends.size();
+    }
 }
